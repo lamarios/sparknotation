@@ -31,7 +31,7 @@ $ curl http://localhost:4567/hello/world
 >>> Hello world
 ```
 
-An instance of heach SparkController will be created and you can get it back
+An instance of each SparkController will be created and you can get it back
 ```Java
 Sparknnotation.getController(TestController.class);
 ```
