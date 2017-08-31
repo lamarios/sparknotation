@@ -62,7 +62,7 @@ public class SimpleTest {
      */
     @Test
     public void testPostName() throws UnirestException {
-        String result = Unirest.post(LOCALHOST + "/hello").field("name", "moto").asString().getBody();
+        String result = Unirest.post(LOCALHOST + "/hello").field("value", "moto").asString().getBody();
 
 
         assertEquals("Hello moto !", result);

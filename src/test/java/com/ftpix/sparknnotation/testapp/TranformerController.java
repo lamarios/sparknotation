@@ -7,7 +7,7 @@ import com.ftpix.sparknnotation.testapp.transformer.JsonTransformer;
 import java.util.HashMap;
 import java.util.Map;
 
-@SparkController(path = "/transformer")
+@SparkController(value = "/transformer")
 public class TranformerController {
 
 

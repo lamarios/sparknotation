@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SparkController {
     String name() default "";
-    String path() default "";
+    String value() default "";
 }

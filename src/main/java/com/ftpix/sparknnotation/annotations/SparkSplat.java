@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 public @interface SparkSplat {
 
-    int index() default 0;
+    int value() default 0;
 
 }

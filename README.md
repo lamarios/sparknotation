@@ -11,12 +11,11 @@ Create a class with the annotation *@SparkController* and add a method with the 
 @SparkController
 public class TestController {
 
-    @SparkGet(path = "/hello/:name")
-    public String hello(@SparkParam(name = "name") String name){
+    @SparkGet("/hello/:name")
+    public String hello(@SparkParam("name") String name){
         return "Hello "+ name;
     }
 }
-
 ```
 
 Once this is done, you just need to add this line of code in your main method (or anywhere else)
@@ -47,7 +46,7 @@ SparkJava offers a great way to transform the response before sending it back to
 
 To follow [SparkJava's Response Transformer example](http://sparkjava.com/documentation#response-transformer) using Sparknnotation it will be as following using the same JsonTransformer
 ```Java
-@SparkGet(path = "/hello", transformer = JsonTransformer.class)
+@SparkGet(value = "/hello", transformer = JsonTransformer.class)
 public MyMessage hello(){
 	return new MyMessage("Hello World");
 }
@@ -61,7 +60,7 @@ Used on a class to declare a SparkController.
 
 | Parameter | Usage |
 |--------|--------|
-| name (optional) | Used to identify a controller by a name  |
+| value (optional) | Used to identify a controller by a name  |
 | path (optional) | Prefix path for every endpoints under this controller |
 
 ### Method annotations
@@ -71,7 +70,7 @@ Used on a method to create a GET endpoint
 
 | Parameter | Usage |
 |--------|--------|
-| path (optional) | the path of the endpoint |
+| value (optional) | the path of the endpoint |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
 
 #### @SparkPost
@@ -79,7 +78,7 @@ Used on a method to create a POST endpoint
 
 | Parameter | Usage |
 |--------|--------|
-| path (optional) | the path of the endpoint |
+| value (optional) | the path of the endpoint |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
 
 #### @SparkPut
@@ -87,7 +86,7 @@ Used on a method to create a PUT endpoint
 
 | Parameter | Usage |
 |--------|--------|
-| path (optional) | the path of the endpoint |
+| value (optional) | the path of the endpoint |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
 
 #### @SparkDelete
@@ -95,7 +94,7 @@ Used on a method to create a DELETE endpoint
 
 | Parameter | Usage |
 |--------|--------|
-| path (optional) | the path of the endpoint |
+| value (optional) | the path of the endpoint |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
 
 #### @SparkOptions
@@ -103,7 +102,7 @@ Used on a method to create an OPTIONS endpoint
 
 | Parameter | Usage |
 |--------|--------|
-| path (optional) | the path of the endpoint |
+| value (optional) | the path of the endpoint |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
 
 ### Method annotations
@@ -113,7 +112,7 @@ Used on a method Parameter. Will retrieve the value of a Request.params(String)
 
 | Parameter | Usage |
 |--------|--------|
-| name | The name of the parameter to retrieve |
+| value | The name of the parameter to retrieve |
 
 #### @SparkQueryParam
 Used on a method Parameter. Will retrieve the value of a Request.queryParams(String)
@@ -122,14 +121,21 @@ Used to get POST method form values or query strings
 
 | Parameter | Usage |
 |--------|--------|
-| name | The name of the query param parameter to retrieve |
+| value | The name of the query param parameter to retrieve |
 
 #### @SparkHeader
 Used on a method Parameter. Will retrieve the value of a request header Request.headers(String)
 
 | Parameter | Usage |
 |--------|--------|
-| name | The name of the header to retrieve |
+| value | The name of the header to retrieve |
+
+#### @SparkSplat
+Used on a method Parameter. Will retrieve the value of a splat form the endpoint
+
+| Parameter | Usage |
+|--------|--------|
+| value | Index of splat to retrieve |
 
 #### @SparkRequest
 Used to get the standard Spark Request object
@@ -142,7 +148,7 @@ Used to get the standard Spark Response object
 Sparknnotation can help you convert the body of a request to a java object
 
 For that there are two options
-##### Assign a BodyTransformer when using *Sparknnotation.init()* 
+##### Assign a BodyTransformer when using *Sparknnotation.init()*
 This way will apply the body transformer to all the @SparkBody parameters of all your controllers if not specified othewise with the *transformer* parameter of the annotation.
 
 Example using Gson

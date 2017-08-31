@@ -5,11 +5,11 @@ import com.ftpix.sparknnotation.annotations.SparkController;
 import com.ftpix.sparknnotation.annotations.SparkGet;
 import com.ftpix.sparknnotation.annotations.SparkHeader;
 
-@SparkController(path = "/header")
+@SparkController(value = "/header")
 public class HeaderController {
 
     @SparkGet
-    public String test(@SparkHeader(name="myHeader") String header){
+    public String test(@SparkHeader(value ="myHeader") String header){
        return header;
     }
 

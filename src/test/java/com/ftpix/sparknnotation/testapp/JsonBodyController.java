@@ -6,7 +6,7 @@ import com.ftpix.sparknnotation.annotations.SparkPost;
 import com.ftpix.sparknnotation.testapp.model.SuperModel;
 import com.ftpix.sparknnotation.testapp.transformer.ModelBodyTransformer;
 
-@SparkController(path="/json-body")
+@SparkController(value ="/json-body")
 public class JsonBodyController {
 
 
@@ -17,7 +17,7 @@ public class JsonBodyController {
 
 
 
-    @SparkPost(path = "/2")
+    @SparkPost(value = "/2")
     public String test2(@SparkBody(transformer = ModelBodyTransformer.class) SuperModel model){
         return model.getName()+"-"+model.getCount();
     }

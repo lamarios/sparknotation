@@ -9,36 +9,36 @@ import spark.Response;
 public class TestController {
 
 
-    @SparkGet(path = "/hello/:name")
-    public String helloWorld(@SparkParam(name = "name") String name) {
+    @SparkGet(value = "/hello/:value")
+    public String helloWorld(@SparkParam(value = "value") String name) {
         return "Hello " + name + " !";
     }
 
 
-    @SparkGet(path = "/hello/:firstName/:lastName")
+    @SparkGet(value = "/hello/:firstName/:lastName")
     public String helloFullName(
-            @SparkParam(name = "firstName") String firstName,
-            @SparkParam(name = "lastName") String lastName) {
+            @SparkParam(value = "firstName") String firstName,
+            @SparkParam(value = "lastName") String lastName) {
         return "Hello " + firstName + " " + lastName + " !";
     }
 
-    @SparkPost(path = "/hello")
+    @SparkPost(value = "/hello")
     public String helloPost(
-            @SparkQueryParam(name = "name") String name
+            @SparkQueryParam(value = "value") String name
     ) {
         return "Hello " + name + " !";
     }
 
 
-    @SparkGet(path = "/testRequest/:name")
+    @SparkGet(value = "/testRequest/:value")
     public String testRequest(Request request, Response response) {
         response.header("test-header", "header");
-        return request.params("name");
+        return request.params("value");
     }
 
 
-    @SparkGet(path="/testSplat/*/and/*")
-    public String testSplat(@SparkSplat(index = 1) String secondSplat, @SparkSplat String firstSplat){
+    @SparkGet(value ="/testSplat/*/and/*")
+    public String testSplat(@SparkSplat(value = 1) String secondSplat, @SparkSplat String firstSplat){
         return firstSplat+" and "+secondSplat;
     }
 }

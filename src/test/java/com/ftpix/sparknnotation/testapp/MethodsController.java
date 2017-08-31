@@ -6,20 +6,20 @@ import com.ftpix.sparknnotation.annotations.SparkDelete;
 import com.ftpix.sparknnotation.annotations.SparkOptions;
 import com.ftpix.sparknnotation.annotations.SparkPut;
 
-@SparkController(path = "/methods")
+@SparkController(value = "/methods")
 public class MethodsController {
 
-    @SparkPut(path = "/put")
+    @SparkPut(value = "/put")
     public String put(){
         return "put";
     }
 
-    @SparkDelete(path = "/delete")
+    @SparkDelete(value = "/delete")
     public String delete(){
         return "delete";
     }
 
-    @SparkOptions(path = "/options")
+    @SparkOptions(value = "/options")
     public String options(){
         return "options";
     }

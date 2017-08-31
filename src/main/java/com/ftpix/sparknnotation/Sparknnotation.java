@@ -71,7 +71,7 @@ private static BodyTransformer bodyTransformer;
 
                         controllers.put(controllerName, o);
 
-                        String path = Optional.ofNullable(annotation.path()).orElse("");
+                        String path = Optional.ofNullable(annotation.value()).orElse("");
 
                         //find method with desired annotations
                         Stream.of(clazz.getDeclaredMethods())
@@ -90,7 +90,7 @@ private static BodyTransformer bodyTransformer;
     /**
      * Process methods with any of the Spark annotation
      *
-     * @param controllerPath the path prefix from the controller
+     * @param controllerPath the value prefix from the controller
      * @param controller     the controller itself
      * @param method         the method we're processing
      */
@@ -108,19 +108,19 @@ private static BodyTransformer bodyTransformer;
     /**
      * Creates a Spark before endpoint
      *
-     * @param controllerPath the path prefix from the controller
+     * @param controllerPath the value prefix from the controller
      * @param controller     the controller itself
      * @param method         the method we're processing
      * @param before         the annotation
      */
     private static void createBefore(String controllerPath, Object controller, Method method, SparkBefore before) {
-        String path = (controllerPath + before.path()).trim();
+        String path = (controllerPath + before.value()).trim();
 
         if (path.length() > 0) {
             logger.info("Creating before [{}] on controller: {}", path, controller.getClass());
             Spark.before(path, (request, response) -> beforeAfterContent(controller, method, request, response));
         } else {
-            logger.info("Creating before [no-path] on controller: {}", controller.getClass());
+            logger.info("Creating before [no-value] on controller: {}", controller.getClass());
             Spark.before((request, response) -> beforeAfterContent(controller, method, request, response));
         }
     }
@@ -128,19 +128,19 @@ private static BodyTransformer bodyTransformer;
     /**
      * Creates a Spark After endpoint
      *
-     * @param controllerPath the path prefix from the controller
+     * @param controllerPath the value prefix from the controller
      * @param controller     the controller itself
      * @param method         the method we're processing
      * @param after          the annotation
      */
     private static void createAfter(String controllerPath, Object controller, Method method, SparkAfter after) {
-        String path = (controllerPath + after.path()).trim();
+        String path = (controllerPath + after.value()).trim();
 
         if (path.length() > 0) {
             logger.info("Creating After [{}] on controller: {}", path, controller.getClass());
             Spark.after(path, (request, response) -> beforeAfterContent(controller, method, request, response));
         } else {
-            logger.info("Creating After [no-path] on controller: {}", controller.getClass());
+            logger.info("Creating After [no-value] on controller: {}", controller.getClass());
             Spark.after((request, response) -> beforeAfterContent(controller, method, request, response));
         }
     }
@@ -149,19 +149,19 @@ private static BodyTransformer bodyTransformer;
     /**
      * Creates a Spark AfterAfter endpoint
      *
-     * @param controllerPath the path prefix from the controller
+     * @param controllerPath the value prefix from the controller
      * @param controller     the controller itself
      * @param method         the method we're processing
      * @param afterAfter     the annotation
      */
     private static void createAfterAfter(String controllerPath, Object controller, Method method, SparkAfterAfter afterAfter) {
-        String path = (controllerPath + afterAfter.path()).trim();
+        String path = (controllerPath + afterAfter.value()).trim();
 
         if (path.length() > 0) {
             logger.info("Creating afterAfter [{}] on controller: {}", path, controller.getClass());
             Spark.afterAfter(path, (request, response) -> beforeAfterContent(controller, method, request, response));
         } else {
-            logger.info("Creating afterAfter [no-path] on controller: {}", controller.getClass());
+            logger.info("Creating afterAfter [no-value] on controller: {}", controller.getClass());
             Spark.afterAfter((request, response) -> beforeAfterContent(controller, method, request, response));
 
         }
@@ -171,13 +171,13 @@ private static BodyTransformer bodyTransformer;
     /**
      * Creates a Spark option endpoint
      *
-     * @param controllerPath the path prefix from the controller
+     * @param controllerPath the value prefix from the controller
      * @param controller     the controller itself
      * @param method         the method we're processing
      * @param options        the annotation
      */
     private static void createOptions(String controllerPath, Object controller, Method method, SparkOptions options) {
-        String path = (controllerPath + options.path()).trim();
+        String path = (controllerPath + options.value()).trim();
 
 
         ResponseTransformer t;
@@ -195,13 +195,13 @@ private static BodyTransformer bodyTransformer;
     /**
      * Creates a Spark Delete endpoint
      *
-     * @param controllerPath the path prefix from the controller
+     * @param controllerPath the value prefix from the controller
      * @param controller     the controller itself
      * @param method         the method we're processing
      * @param delete         the annotation
      */
     private static void createDelete(String controllerPath, Object controller, Method method, SparkDelete delete) {
-        String path = (controllerPath + delete.path()).trim();
+        String path = (controllerPath + delete.value()).trim();
 
 
         ResponseTransformer t;
@@ -220,13 +220,13 @@ private static BodyTransformer bodyTransformer;
     /**
      * Creates a Spark Put endpoint
      *
-     * @param controllerPath the path prefix from the controller
+     * @param controllerPath the value prefix from the controller
      * @param controller     the controller itself
      * @param method         the method we're processing
      * @param put            the annotation
      */
     private static void createPut(String controllerPath, Object controller, Method method, SparkPut put) {
-        String path = (controllerPath +put.path()).trim();
+        String path = (controllerPath +put.value()).trim();
 
 
         ResponseTransformer t;
@@ -245,13 +245,13 @@ private static BodyTransformer bodyTransformer;
     /**
      * Creates a Spark Post endpoint
      *
-     * @param controllerPath the path prefix from the controller
+     * @param controllerPath the value prefix from the controller
      * @param controller     the controller itself
      * @param method         the method we're processing
      * @param post           the annotation
      */
     private static void createPost(String controllerPath, Object controller, Method method, SparkPost post) {
-        String path = (controllerPath +post.path()).trim();
+        String path = (controllerPath +post.value()).trim();
 
 
         ResponseTransformer t;
@@ -269,13 +269,13 @@ private static BodyTransformer bodyTransformer;
     /**
      * Creates a Spark Get endpoint
      *
-     * @param controllerPath the path prefix from the controller
+     * @param controllerPath the value prefix from the controller
      * @param controller     the controller itself
      * @param method         the method we're processing
      * @param get            the annotation
      */
     private static void createGet(String controllerPath, Object controller, Method method, SparkGet get) {
-        String path = (controllerPath +get.path()).trim();
+        String path = (controllerPath +get.value()).trim();
         logger.info("Creating GET [{}] on controller: {}", path, controller.getClass());
 
         ResponseTransformer t;
@@ -355,31 +355,31 @@ private static BodyTransformer bodyTransformer;
 
                         Optional.ofNullable(p.getDeclaredAnnotation(SparkParam.class))
                                 .ifPresent(a -> {
-                                    Object param = getParamValue(request.params(a.name()), p.getType());
-                                    logger.info("Param of type {} has SparkParam annotation with name [{}]", p.getType(), a.name());
+                                    Object param = getParamValue(request.params(a.value()), p.getType());
+                                    logger.info("Param of type {} has SparkParam annotation with value [{}]", p.getType(), a.value());
                                     params.add(param);
                                 });
 
 
                         Optional.ofNullable(p.getDeclaredAnnotation(SparkQueryParam.class))
                                 .ifPresent(a -> {
-                                    Object param = getParamValue(request.queryParams(a.name()), p.getType());
-                                    logger.info("Param of type {} has SparkQueryParam annotation with name [{}]", p.getType(), a.name());
+                                    Object param = getParamValue(request.queryParams(a.value()), p.getType());
+                                    logger.info("Param of type {} has SparkQueryParam annotation with value [{}]", p.getType(), a.value());
                                     params.add(param);
                                 });
 
                         Optional.ofNullable(p.getDeclaredAnnotation(SparkHeader.class))
                                 .ifPresent(a -> {
-                                    Object param = getParamValue(request.headers(a.name()), p.getType());
-                                    logger.info("Param of type {} has SparkHeader annotation with name [{}]", p.getType(), a.name());
+                                    Object param = getParamValue(request.headers(a.value()), p.getType());
+                                    logger.info("Param of type {} has SparkHeader annotation with value [{}]", p.getType(), a.value());
                                     params.add(param);
                                 });
 
                         Optional.ofNullable(p.getDeclaredAnnotation(SparkSplat.class))
                                 .filter(a -> p.getType().equals(String.class))
                                 .ifPresent(a -> {
-                                    Object param = request.splat()[a.index()];
-                                    logger.info("Param of type {} has SparkSplat annotation with index [{}]", p.getType(), a.index());
+                                    Object param = request.splat()[a.value()];
+                                    logger.info("Param of type {} has SparkSplat annotation with value [{}]", p.getType(), a.value());
                                     params.add(param);
                                 });
 
@@ -438,9 +438,9 @@ private static BodyTransformer bodyTransformer;
 
 
     /**
-     * Gets back a controller by its name
+     * Gets back a controller by its value
      *
-     * @param name  the name of the controller
+     * @param name  the value of the controller
      * @param clazz the class of it
      * @param <T>
      * @return

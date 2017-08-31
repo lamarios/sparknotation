@@ -42,7 +42,7 @@ public class JsonBodyTest {
      */
     @Test
     public void testJsonBodyFromBodyAnnotation() throws UnirestException {
-        String result = Unirest.post(Setup.LOCALHOST+"/json-body/2").body("name=salt;count=3").asString().getBody();
+        String result = Unirest.post(Setup.LOCALHOST+"/json-body/2").body("value=salt;count=3").asString().getBody();
         Assert.assertEquals("salt-3", result);
     }
 

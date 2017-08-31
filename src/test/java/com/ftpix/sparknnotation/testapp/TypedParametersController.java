@@ -5,34 +5,34 @@ import com.ftpix.sparknnotation.annotations.SparkController;
 import com.ftpix.sparknnotation.annotations.SparkGet;
 import com.ftpix.sparknnotation.annotations.SparkParam;
 
-@SparkController(name="typed", path = "/typed")
+@SparkController(name="typed", value = "/typed")
 public class TypedParametersController {
 
 
 
 
-    @SparkGet(path = "/int/:id")
-    public int test(@SparkParam(name="id") int id){
+    @SparkGet(value = "/int/:id")
+    public int test(@SparkParam(value ="id") int id){
         return id;
     }
 
-    @SparkGet(path="/float/:id")
-    public float testFloat(@SparkParam(name="id") float id){
+    @SparkGet(value ="/float/:id")
+    public float testFloat(@SparkParam(value ="id") float id){
         return id;
     }
 
-    @SparkGet(path="/long/:id")
-    public long testLong(@SparkParam(name="id") long id){
+    @SparkGet(value ="/long/:id")
+    public long testLong(@SparkParam(value ="id") long id){
         return id;
     }
 
-    @SparkGet(path="/double/:id")
-    public double testDouble(@SparkParam(name="id") double id){
+    @SparkGet(value ="/double/:id")
+    public double testDouble(@SparkParam(value ="id") double id){
         return id;
     }
 
-    @SparkGet(path="/boolean/:id")
-    public boolean testBoolean(@SparkParam(name="id") boolean id){
+    @SparkGet(value ="/boolean/:id")
+    public boolean testBoolean(@SparkParam(value ="id") boolean id){
         return id;
     }
 

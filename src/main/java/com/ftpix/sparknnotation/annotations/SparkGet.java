@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SparkGet {
-    String path() default "";
+    String value() default "";
     Class<? extends ResponseTransformer> transformer() default DefaultTransformer.class;
 }
