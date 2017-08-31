@@ -368,6 +368,12 @@ private static BodyTransformer bodyTransformer;
                                     params.add(param);
                                 });
 
+                        Optional.ofNullable(p.getDeclaredAnnotation(SparkHeader.class))
+                                .ifPresent(a -> {
+                                    Object param = getParamValue(request.headers(a.name()), p.getType());
+                                    logger.info("Param of type {} has SparkHeader annotation with name [{}]", p.getType(), a.name());
+                                    params.add(param);
+                                });
 
                         Optional.ofNullable(p.getDeclaredAnnotation(SparkSplat.class))
                                 .filter(a -> p.getType().equals(String.class))
