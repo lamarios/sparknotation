@@ -2,6 +2,33 @@
 
 Sparknnotation is a library to use Sparkjava framework with annotation. It is useful when working on projects with a lot of endpoints where it sometimes becomes messy to deal with all these Spark.something methods. It also saves the hassle of alwyas getting back parameters, query parameters and headers from the *Request* object.
 
+## Download
+
+Add this repository to your pom.xml
+
+```xml
+<repositories>
+    <repository>
+        <id>sparknnotation</id>
+        <url>https://raw.github.com/lamarios/sparknnotation/mvn-repo/</url>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+        </snapshots>
+    </repository>
+</repositories>
+```
+
+and the dependency as follow
+
+```xml
+<dependency>
+	<groupId>com.ftpix</groupId>
+    <artifactId>sparknnotation</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+```
+
 ## How to use
 
 ### Simple GET request
@@ -162,6 +189,7 @@ public String hello(@SparkQueryParam("name") String name){
 
 ```bash
 curl -d "name=world" http://localhost:4567/hello
+>>> world
 ```
 
 #### @SparkHeader
