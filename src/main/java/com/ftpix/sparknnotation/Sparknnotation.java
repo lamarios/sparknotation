@@ -2,15 +2,13 @@ package com.ftpix.sparknnotation;
 
 import com.ftpix.sparknnotation.annotations.*;
 import com.ftpix.sparknnotation.defaultvalue.DefaultBodyTransformer;
+import com.ftpix.sparknnotation.defaultvalue.DefaultTemplateEngine;
 import com.ftpix.sparknnotation.defaultvalue.DefaultTransformer;
 import com.ftpix.sparknnotation.interfaces.BodyTransformer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.reflections.Reflections;
-import spark.Request;
-import spark.Response;
-import spark.ResponseTransformer;
-import spark.Spark;
+import spark.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -23,9 +21,7 @@ public class Sparknnotation {
 
     private static Map<String, Object> controllers = new HashMap<>();
     private static Logger logger = LogManager.getLogger(Sparknnotation.class);
-private static BodyTransformer bodyTransformer;
-
-
+    private static BodyTransformer bodyTransformer;
 
 
     private static Predicate<Annotation> isSparkAnnotation = a -> a.annotationType().equals(SparkGet.class)
@@ -38,13 +34,13 @@ private static BodyTransformer bodyTransformer;
             || a.annotationType().equals(SparkAfterAfter.class);
 
 
-
-    public static void init(){
+    public static void init() {
         init(null);
     }
 
     /**
      * Will find all the @SparkController annotations and will process them.
+     *
      * @param transformer a json body transformer
      */
     public static void init(BodyTransformer transformer) {
@@ -95,14 +91,120 @@ private static BodyTransformer bodyTransformer;
      * @param method         the method we're processing
      */
     private static void processMethod(String controllerPath, Object controller, Method method) {
-        Optional.of(method).map(m -> m.getAnnotation(SparkGet.class)).ifPresent(a -> Sparknnotation.createGet(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkPost.class)).ifPresent(a -> Sparknnotation.createPost(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkPut.class)).ifPresent(a -> Sparknnotation.createPut(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkDelete.class)).ifPresent(a -> Sparknnotation.createDelete(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkOptions.class)).ifPresent(a -> Sparknnotation.createOptions(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkGet.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkPost.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkPut.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkDelete.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkOptions.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
         Optional.of(method).map(m -> m.getAnnotation(SparkBefore.class)).ifPresent(a -> Sparknnotation.createBefore(controllerPath, controller, method, a));
+
         Optional.of(method).map(m -> m.getAnnotation(SparkAfter.class)).ifPresent(a -> Sparknnotation.createAfter(controllerPath, controller, method, a));
         Optional.of(method).map(m -> m.getAnnotation(SparkAfterAfter.class)).ifPresent(a -> Sparknnotation.createAfterAfter(controllerPath, controller, method, a));
+
+    }
+
+
+    private static void createEndPoint(String controllerPath, Object controller, Method method, Annotation annotation) {
+
+        String value = null;
+        ResponseTransformer transformer = null;
+        TemplateEngine templateEngine = null;
+        String acceptType = "*/*";
+        String sparkMethod = null;
+        try {
+            switch (annotation.annotationType().getSimpleName()) {
+                case "SparkGet":
+                    SparkGet get = (SparkGet) annotation;
+                    value = get.value();
+                    transformer = get.transformer().newInstance();
+                    templateEngine = get.templateEngine().newInstance();
+                    acceptType = get.accept();
+                    sparkMethod = "get";
+                    break;
+                case "SparkPost":
+                    SparkPost post = (SparkPost) annotation;
+                    value = post.value();
+                    transformer = post.transformer().newInstance();
+                    templateEngine = post.templateEngine().newInstance();
+                    acceptType = post.accept();
+                    sparkMethod = "post";
+                    break;
+                case "SparkPut":
+                    SparkPut put = (SparkPut) annotation;
+                    value = put.value();
+                    transformer = put.transformer().newInstance();
+                    templateEngine = put.templateEngine().newInstance();
+                    acceptType = put.accept();
+                    sparkMethod = "put";
+                    break;
+                case "SparkDelete":
+                    SparkDelete delete = (SparkDelete) annotation;
+                    value = delete.value();
+                    transformer = delete.transformer().newInstance();
+                    templateEngine = delete.templateEngine().newInstance();
+                    acceptType = delete.accept();
+                    sparkMethod = "delete";
+                    break;
+                case "SparkOptions":
+                    SparkOptions opts = (SparkOptions) annotation;
+                    value = opts.value();
+                    transformer = opts.transformer().newInstance();
+                    templateEngine = opts.templateEngine().newInstance();
+                    acceptType = opts.accept();
+                    sparkMethod = "options";
+                    break;
+            }
+        } catch (InstantiationException | IllegalAccessException e) {
+            logger.error("Couldn't create transformer, using DefaultTransformer", e);
+            transformer = new DefaultTransformer();
+            templateEngine = new DefaultTemplateEngine();
+            sparkMethod = null;
+        }
+
+        final String path = (controllerPath + value).trim();
+
+        Class spark = Spark.class;
+        List<Class> sparkMethodParams = new ArrayList<>();
+        sparkMethodParams.add(String.class);
+        sparkMethodParams.add(String.class);
+
+
+        try {
+            //method that use a template
+            if (method.getReturnType().equals(ModelAndView.class)) {
+                sparkMethodParams.add(TemplateViewRoute.class);
+                sparkMethodParams.add(TemplateEngine.class);
+                Optional<Method> optionalMethod = Optional.ofNullable(spark.getMethod(sparkMethod, sparkMethodParams.toArray(new Class[sparkMethodParams.size()])));
+
+                TemplateViewRoute route = (req, res) -> (ModelAndView) methodContent(controller, method, req, res);
+                if(optionalMethod.isPresent()){
+                    Method m = optionalMethod.get();
+                    logger.info("Creating {} [{}] on controller: {} with TemplateEngine {}", sparkMethod, path, controller.getClass(), templateEngine.getClass());
+                    m.invoke(null, path, acceptType, route, templateEngine);
+                }
+            } else { //normal methods
+                sparkMethodParams.add(Route.class);
+                sparkMethodParams.add(ResponseTransformer.class);
+
+                Optional<Method> optionalMethod = Optional.ofNullable(spark.getMethod(sparkMethod, sparkMethodParams.toArray(new Class[sparkMethodParams.size()])));
+
+                Route route = (req, res) -> methodContent(controller, method, req, res);
+                if(optionalMethod.isPresent()){
+                    Method m = optionalMethod.get();
+                    logger.info("Creating {} [{}] on controller: {} with ResponseTransformer {}", sparkMethod, path, controller.getClass(), transformer.getClass());
+                    m.invoke(null, path, acceptType, route, transformer);
+                }
+            }
+        }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
+            logger.error("Couldn't create Spark endpoint");
+            throw new RuntimeException(e);
+        }
+
+
+
+
+
+//        Spark.options(path, acceptType,(request, response) -> methodContent(controller,method, request, response), transformer);
     }
 
     /**
@@ -167,127 +269,6 @@ private static BodyTransformer bodyTransformer;
         }
     }
 
-
-    /**
-     * Creates a Spark option endpoint
-     *
-     * @param controllerPath the value prefix from the controller
-     * @param controller     the controller itself
-     * @param method         the method we're processing
-     * @param options        the annotation
-     */
-    private static void createOptions(String controllerPath, Object controller, Method method, SparkOptions options) {
-        String path = (controllerPath + options.value()).trim();
-
-
-        ResponseTransformer t;
-        try {
-            t = options.transformer().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("Couldn't create transformer, using DefaultTransformer", e);
-            t = new DefaultTransformer();
-        }
-
-        logger.info("Creating OPTIONS [{}] on controller: {}", path, controller.getClass());
-        Spark.options(path, (request, response) -> methodContent(controller, method, request, response), t);
-    }
-
-    /**
-     * Creates a Spark Delete endpoint
-     *
-     * @param controllerPath the value prefix from the controller
-     * @param controller     the controller itself
-     * @param method         the method we're processing
-     * @param delete         the annotation
-     */
-    private static void createDelete(String controllerPath, Object controller, Method method, SparkDelete delete) {
-        String path = (controllerPath + delete.value()).trim();
-
-
-        ResponseTransformer t;
-        try {
-            t = delete.transformer().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("Couldn't create transformer, using DefaultTransformer", e);
-            t = new DefaultTransformer();
-        }
-
-
-        logger.info("Creating Delete [{}] on controller: {}", path, controller.getClass());
-        Spark.delete(path, (request, response) -> methodContent(controller, method, request, response), t);
-    }
-
-    /**
-     * Creates a Spark Put endpoint
-     *
-     * @param controllerPath the value prefix from the controller
-     * @param controller     the controller itself
-     * @param method         the method we're processing
-     * @param put            the annotation
-     */
-    private static void createPut(String controllerPath, Object controller, Method method, SparkPut put) {
-        String path = (controllerPath +put.value()).trim();
-
-
-        ResponseTransformer t;
-        try {
-            t = put.transformer().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("Couldn't create transformer, using DefaultTransformer", e);
-            t = new DefaultTransformer();
-        }
-
-
-        logger.info("Creating PUT [{}] on controller: {}", path, controller.getClass());
-        Spark.put(path, (request, response) -> methodContent(controller, method, request, response), t);
-    }
-
-    /**
-     * Creates a Spark Post endpoint
-     *
-     * @param controllerPath the value prefix from the controller
-     * @param controller     the controller itself
-     * @param method         the method we're processing
-     * @param post           the annotation
-     */
-    private static void createPost(String controllerPath, Object controller, Method method, SparkPost post) {
-        String path = (controllerPath +post.value()).trim();
-
-
-        ResponseTransformer t;
-        try {
-            t = post.transformer().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("Couldn't create transformer, using DefaultTransformer", e);
-            t = new DefaultTransformer();
-        }
-
-        logger.info("Creating POST [{}] on controller: {}", path, controller.getClass());
-        Spark.post(path, (request, response) -> methodContent(controller, method, request, response), t);
-    }
-
-    /**
-     * Creates a Spark Get endpoint
-     *
-     * @param controllerPath the value prefix from the controller
-     * @param controller     the controller itself
-     * @param method         the method we're processing
-     * @param get            the annotation
-     */
-    private static void createGet(String controllerPath, Object controller, Method method, SparkGet get) {
-        String path = (controllerPath +get.value()).trim();
-        logger.info("Creating GET [{}] on controller: {}", path, controller.getClass());
-
-        ResponseTransformer t;
-        try {
-            t = get.transformer().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("Couldn't create transformer, using DefaultTransformer", e);
-            t = new DefaultTransformer();
-        }
-
-        Spark.get(path, (request, response) -> methodContent(controller, method, request, response),t);
-    }
 
 
     /**
@@ -388,9 +369,9 @@ private static BodyTransformer bodyTransformer;
                                     Object param;
                                     BodyTransformer transformer;
 
-                                    if(a.transformer().equals(DefaultBodyTransformer.class)){
+                                    if (a.transformer().equals(DefaultBodyTransformer.class)) {
                                         transformer = bodyTransformer;
-                                    }else{
+                                    } else {
                                         try {
                                             transformer = a.transformer().newInstance();
                                         } catch (InstantiationException | IllegalAccessException e) {
