@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ftpix</groupId>
-    <artifactId>sparknnotation</artifactId>
+    <artifactId>sparknotation</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -100,7 +100,7 @@
                     <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
                     <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
                     <includes><include>**/*</include></includes>
-                    <repositoryName>sparknnotation</repositoryName>      <!-- github repo name -->
+                    <repositoryName>sparknotation</repositoryName>      <!-- github repo name -->
                     <repositoryOwner>lamarios</repositoryOwner>    <!-- github username  -->
                 </configuration>
                 <executions>
