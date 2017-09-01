@@ -9,7 +9,7 @@ Add this repository to your pom.xml
 ```xml
 <repositories>
     <repository>
-        <id>sparknnotation</id>
+        <id>sparknotation</id>
         <url>https://raw.github.com/lamarios/sparknnotation/mvn-repo/</url>
         <snapshots>
             <enabled>true</enabled>
@@ -24,7 +24,7 @@ and the dependency as follow
 ```xml
 <dependency>
 	<groupId>com.ftpix</groupId>
-    <artifactId>sparknnotation</artifactId>
+    <artifactId>sparknotation</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
