@@ -23,7 +23,7 @@ and the dependency as follow
 
 ```xml
 <dependency>
-	<groupId>com.ftpix</groupId>
+    <groupId>com.ftpix</groupId>
     <artifactId>sparknotation</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
