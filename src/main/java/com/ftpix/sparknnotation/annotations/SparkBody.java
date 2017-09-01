@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SparkBody {
-    Class<? extends BodyTransformer> transformer() default DefaultBodyTransformer.class;
+    Class<? extends BodyTransformer> value() default DefaultBodyTransformer.class;
 }

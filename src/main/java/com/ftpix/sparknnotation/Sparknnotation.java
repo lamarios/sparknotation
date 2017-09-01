@@ -41,7 +41,7 @@ public class Sparknnotation {
     /**
      * Will find all the @SparkController annotations and will process them.
      *
-     * @param transformer a json body transformer
+     * @param transformer a json body value
      */
     public static void init(BodyTransformer transformer) {
 
@@ -155,7 +155,7 @@ public class Sparknnotation {
                     break;
             }
         } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("Couldn't create transformer, using DefaultTransformer", e);
+            logger.error("Couldn't create value, using DefaultTransformer", e);
             transformer = new DefaultTransformer();
             templateEngine = new DefaultTemplateEngine();
             sparkMethod = null;
@@ -204,7 +204,7 @@ public class Sparknnotation {
 
 
 
-//        Spark.options(path, acceptType,(request, response) -> methodContent(controller,method, request, response), transformer);
+//        Spark.options(path, acceptType,(request, response) -> methodContent(controller,method, request, response), value);
     }
 
     /**
@@ -369,14 +369,14 @@ public class Sparknnotation {
                                     Object param;
                                     BodyTransformer transformer;
 
-                                    if (a.transformer().equals(DefaultBodyTransformer.class)) {
+                                    if (a.value().equals(DefaultBodyTransformer.class)) {
                                         transformer = bodyTransformer;
                                     } else {
                                         try {
-                                            transformer = a.transformer().newInstance();
+                                            transformer = a.value().newInstance();
                                         } catch (InstantiationException | IllegalAccessException e) {
                                             transformer = new DefaultBodyTransformer();
-                                            logger.error("Couldn't create the body transformer");
+                                            logger.error("Couldn't create the body value");
                                         }
                                     }
                                     param = transformer.transform(request.body(), p.getType());

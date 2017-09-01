@@ -2,6 +2,8 @@
 
 Sparknnotation is a library to use Sparkjava framework with annotation. It is useful when working on projects with a lot of endpoints where it sometimes becomes messy to deal with all these Spark.something methods. It also saves the hassle of alwyas getting back parameters, query parameters and headers from the *Request* object
 
+[TOC]
+
 ## How to use
 
 ### Simple GET request
@@ -18,7 +20,7 @@ public class TestController {
 }
 ```
 
-Once this is done, you just need to add this line of code in your main method (or anywhere else)
+Once this is done, you just need to add this line of code in your main method or wherever you would usually declare your Spark endpoints.
 
 ```Java
 public static void main(String[] args) {
@@ -71,7 +73,9 @@ Used on a method to create a GET endpoint
 | Parameter | Usage |
 |--------|--------|
 | value (optional) | the path of the endpoint |
+| accept (optional) | the type of request this endpoint should respond to |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
+| templateEngine (optional) | A template engine, works the same way as Spark. **note that templateEngine has the priority against transformer if both are set**|
 
 #### @SparkPost
 Used on a method to create a POST endpoint
@@ -79,7 +83,9 @@ Used on a method to create a POST endpoint
 | Parameter | Usage |
 |--------|--------|
 | value (optional) | the path of the endpoint |
+| accept (optional) | the type of request this endpoint should respond to |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
+| templateEngine (optional) | A template engine, works the same way as Spark. **note that templateEngine has the priority against transformer if both are set**|
 
 #### @SparkPut
 Used on a method to create a PUT endpoint
@@ -87,7 +93,9 @@ Used on a method to create a PUT endpoint
 | Parameter | Usage |
 |--------|--------|
 | value (optional) | the path of the endpoint |
+| accept (optional) | the type of request this endpoint should respond to |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
+| templateEngine (optional) | A template engine, works the same way as Spark. **note that templateEngine has the priority against transformer if both are set**|
 
 #### @SparkDelete
 Used on a method to create a DELETE endpoint
@@ -95,7 +103,9 @@ Used on a method to create a DELETE endpoint
 | Parameter | Usage |
 |--------|--------|
 | value (optional) | the path of the endpoint |
+| accept (optional) | the type of request this endpoint should respond to |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
+| templateEngine (optional) | A template engine, works the same way as Spark. **note that templateEngine has the priority against transformer if both are set**|
 
 #### @SparkOptions
 Used on a method to create an OPTIONS endpoint
@@ -103,7 +113,20 @@ Used on a method to create an OPTIONS endpoint
 | Parameter | Usage |
 |--------|--------|
 | value (optional) | the path of the endpoint |
+| accept (optional) | the type of request this endpoint should respond to |
 | transformer (optional) | A response transformer to transform the result of the method (example: return a json of an object)|
+| templateEngine (optional) | A template engine, works the same way as Spark. **note that templateEngine has the priority against transformer if both are set**|
+
+#### Combining methods
+You can combine the different methods on a single method
+
+```Java
+@SparkGet("/hello")
+@SparkPost("/hello")
+public String hello(){
+	return hello;
+}
+```
 
 ### Method annotations
 
@@ -114,6 +137,15 @@ Used on a method Parameter. Will retrieve the value of a Request.params(String)
 |--------|--------|
 | value | The name of the parameter to retrieve |
 
+
+```Java
+@SparkGet("/hello/:name")
+public String hello(@SparkParam("name") String name){
+	return "Hello " + name;
+}
+```
+
+
 #### @SparkQueryParam
 Used on a method Parameter. Will retrieve the value of a Request.queryParams(String)
 
@@ -123,6 +155,17 @@ Used to get POST method form values or query strings
 |--------|--------|
 | value | The name of the query param parameter to retrieve |
 
+```Java
+@SparkPost
+public String hello(@SparkQueryParam("name") String name){
+	return name;
+}
+```
+
+```bash
+curl -d "name=world" http://localhost:4567/hello
+```
+
 #### @SparkHeader
 Used on a method Parameter. Will retrieve the value of a request header Request.headers(String)
 
@@ -130,18 +173,26 @@ Used on a method Parameter. Will retrieve the value of a request header Request.
 |--------|--------|
 | value | The name of the header to retrieve |
 
+```Java
+@SparkBefore("/*")
+public void auth(@SparkHeader("Authorization") String token){
+	// do something
+}
+```
+
 #### @SparkSplat
 Used on a method Parameter. Will retrieve the value of a splat form the endpoint
 
 | Parameter | Usage |
 |--------|--------|
-| value | Index of splat to retrieve |
+| value (defaults to 0)| Index of splat to retrieve (starting from 0) |
 
-#### @SparkRequest
-Used to get the standard Spark Request object
-
-#### @SparkResponse
-Used to get the standard Spark Response object
+```Java
+@SparkGet("/my-path/*/something/*")
+public String hello(@SparkSplat(1) String secondSplat, @SparkSplat String firstSplat){
+	return firstSplat+" "+secondSplat;
+}
+```
 
 
 #### @SparkBody
@@ -158,7 +209,14 @@ Sparknnotation.init(gson::fromJson);
 ```
 This works because BodyTransformer is a functional interface and Gson.fromJson(String json, Class class) fits right into it.
 
-You can create your own transformer by implementing the BodyTransformer interface
+You can create your own transformer by implementing the BodyTransformer interface.
+
+```Java
+@SparkPost
+public String hello(@SparkBody MyObject myObject){
+	//use myObject
+}
+```
 
 ##### Using *@SparkBody* transformer parameter
 
@@ -166,5 +224,24 @@ The *@SparkBody* annotation has can take a *transformer*  parameter which is a c
 
 | Parameter | Usage |
 |--------|--------|
-| transformer | Class of a class inplementing *BodyTransformer* |
+| value | Class of a class inplementing *BodyTransformer* |
+
+```Java
+@SparkPost
+public String hello(@SparkBody(MyBodyTransformer.class) MyObject myObject){
+	//use myObject
+}
+```
+
+### Request and Response objects
+
+You can easily get back the Request and Response objects from Spark if needed, simply add it to your method parameters
+
+```Java
+@SparkGet
+public String hello(Request req,  Response res){
+	//Do something with request and response
+	return "hello";
+}
+```
 

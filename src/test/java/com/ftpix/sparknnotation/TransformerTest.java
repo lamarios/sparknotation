@@ -24,12 +24,12 @@ public class TransformerTest {
 
 
     /**
-     * Test json response transformer {@link TranformerController#test()}
+     * Test json response value {@link TranformerController#test()}
      * @throws UnirestException
      */
     @Test
     public void testJsonTransformer() throws UnirestException {
-        String json = Unirest.get(Setup.LOCALHOST+"/transformer").asString().getBody();
+        String json = Unirest.get(Setup.LOCALHOST+"/value").asString().getBody();
 
         Map<String, String> result = new GsonBuilder().create().fromJson(json, HashMap.class);
 
@@ -38,12 +38,12 @@ public class TransformerTest {
     }
 
     /**
-     * Test json response transformer {@link TranformerController#test()}
+     * Test json response value {@link TranformerController#test()}
      * @throws UnirestException
      */
     @Test
     public void testJsonTransformerPut() throws UnirestException {
-        String json = Unirest.put(Setup.LOCALHOST+"/transformer").asString().getBody();
+        String json = Unirest.put(Setup.LOCALHOST+"/value").asString().getBody();
 
         Map<String, String> result = new GsonBuilder().create().fromJson(json, HashMap.class);
 
@@ -53,12 +53,12 @@ public class TransformerTest {
 
 
     /**
-     * Test json response transformer {@link TranformerController#test()}
+     * Test json response value {@link TranformerController#test()}
      * @throws UnirestException
      */
     @Test
     public void testJsonTransformerPost() throws UnirestException {
-        String json = Unirest.post(Setup.LOCALHOST+"/transformer").asString().getBody();
+        String json = Unirest.post(Setup.LOCALHOST+"/value").asString().getBody();
 
         Map<String, String> result = new GsonBuilder().create().fromJson(json, HashMap.class);
 
@@ -68,12 +68,12 @@ public class TransformerTest {
 
 
     /**
-     * Test json response transformer {@link TranformerController#test()}
+     * Test json response value {@link TranformerController#test()}
      * @throws UnirestException
      */
     @Test
     public void testJsonTransformerDelete() throws UnirestException {
-        String json = Unirest.delete(Setup.LOCALHOST+"/transformer").asString().getBody();
+        String json = Unirest.delete(Setup.LOCALHOST+"/value").asString().getBody();
 
         Map<String, String> result = new GsonBuilder().create().fromJson(json, HashMap.class);
 
@@ -83,12 +83,12 @@ public class TransformerTest {
 
 
     /**
-     * Test json response transformer {@link TranformerController#test()}
+     * Test json response value {@link TranformerController#test()}
      * @throws UnirestException
      */
     @Test
     public void testJsonTransformerOptions() throws UnirestException {
-        String json = Unirest.options(Setup.LOCALHOST+"/transformer").asString().getBody();
+        String json = Unirest.options(Setup.LOCALHOST+"/value").asString().getBody();
 
         Map<String, String> result = new GsonBuilder().create().fromJson(json, HashMap.class);
 
