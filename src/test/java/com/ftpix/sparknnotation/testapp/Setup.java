@@ -1,6 +1,6 @@
 package com.ftpix.sparknnotation.testapp;
 
-import com.ftpix.sparknnotation.Sparknnotation;
+import com.ftpix.sparknnotation.Sparknotation;
 import com.google.gson.Gson;
 import spark.Spark;
 
@@ -20,7 +20,7 @@ public class Setup {
 
             Gson gson = new Gson();
 
-            Sparknnotation.init(gson::fromJson);
+            Sparknotation.init(gson::fromJson);
 
 
             Spark.exception(Exception.class, (e,req, res) ->{

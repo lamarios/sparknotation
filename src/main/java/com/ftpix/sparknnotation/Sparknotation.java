@@ -17,10 +17,10 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class Sparknnotation {
+public class Sparknotation {
 
     private static Map<String, Object> controllers = new HashMap<>();
-    private static Logger logger = LogManager.getLogger(Sparknnotation.class);
+    private static Logger logger = LogManager.getLogger(Sparknotation.class);
     private static BodyTransformer bodyTransformer;
 
 
@@ -72,7 +72,7 @@ public class Sparknnotation {
                         //find method with desired annotations
                         Stream.of(clazz.getDeclaredMethods())
                                 .filter(m -> Stream.of(m.getDeclaredAnnotations()).anyMatch(isSparkAnnotation))
-                                .forEach(m -> Sparknnotation.processMethod(path, o, m));
+                                .forEach(m -> Sparknotation.processMethod(path, o, m));
                     } catch (InstantiationException e) {
                         e.printStackTrace();
                     } catch (IllegalAccessException e) {
@@ -91,15 +91,15 @@ public class Sparknnotation {
      * @param method         the method we're processing
      */
     private static void processMethod(String controllerPath, Object controller, Method method) {
-        Optional.of(method).map(m -> m.getAnnotation(SparkGet.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkPost.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkPut.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkDelete.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkOptions.class)).ifPresent(a -> Sparknnotation.createEndPoint(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkBefore.class)).ifPresent(a -> Sparknnotation.createBefore(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkGet.class)).ifPresent(a -> Sparknotation.createEndPoint(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkPost.class)).ifPresent(a -> Sparknotation.createEndPoint(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkPut.class)).ifPresent(a -> Sparknotation.createEndPoint(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkDelete.class)).ifPresent(a -> Sparknotation.createEndPoint(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkOptions.class)).ifPresent(a -> Sparknotation.createEndPoint(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkBefore.class)).ifPresent(a -> Sparknotation.createBefore(controllerPath, controller, method, a));
 
-        Optional.of(method).map(m -> m.getAnnotation(SparkAfter.class)).ifPresent(a -> Sparknnotation.createAfter(controllerPath, controller, method, a));
-        Optional.of(method).map(m -> m.getAnnotation(SparkAfterAfter.class)).ifPresent(a -> Sparknnotation.createAfterAfter(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkAfter.class)).ifPresent(a -> Sparknotation.createAfter(controllerPath, controller, method, a));
+        Optional.of(method).map(m -> m.getAnnotation(SparkAfterAfter.class)).ifPresent(a -> Sparknotation.createAfterAfter(controllerPath, controller, method, a));
 
     }
 

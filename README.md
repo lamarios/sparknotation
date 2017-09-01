@@ -1,6 +1,6 @@
-# Sparknnotation
+# Sparknotation
 
-Sparknnotation is a library to use Sparkjava framework with annotation. It is useful when working on projects with a lot of endpoints where it sometimes becomes messy to deal with all these Spark.something methods. It also saves the hassle of alwyas getting back parameters, query parameters and headers from the *Request* object.
+Sparknotation is a library to use Sparkjava framework with annotation. It is useful when working on projects with a lot of endpoints where it sometimes becomes messy to deal with all these Spark.something methods. It also saves the hassle of alwyas getting back parameters, query parameters and headers from the *Request* object.
 
 ## Download
 
@@ -49,7 +49,7 @@ Once this is done, you just need to add this line of code in your main method or
 
 ```Java
 public static void main(String[] args) {
-	Sparknnotation.init();
+	Sparknotation.init();
 }
 ```
 And query the server to test
@@ -60,7 +60,7 @@ $ curl http://localhost:4567/hello/world
 
 An instance of each SparkController will be created and you can get it back
 ```Java
-Sparknnotation.getController(TestController.class);
+Sparknotation.getController(TestController.class);
 ```
 
 
@@ -71,7 +71,7 @@ Note that is still possible to configure SparkJava normally or to add any other 
 SparkJava offers a great way to transform the response before sending it back to the client (JSON results or templating engine), Sparknnnotation offers the same options so the method annotations take in a parameter for classes extending Spark's ResponseTransformer
 
 
-To follow [SparkJava's Response Transformer example](http://sparkjava.com/documentation#response-transformer) using Sparknnotation it will be as following using the same JsonTransformer
+To follow [SparkJava's Response Transformer example](http://sparkjava.com/documentation#response-transformer) using Sparknotation it will be as following using the same JsonTransformer
 ```Java
 @SparkGet(value = "/hello", transformer = JsonTransformer.class)
 public MyMessage hello(){
@@ -222,16 +222,16 @@ public String hello(@SparkSplat(1) String secondSplat, @SparkSplat String firstS
 
 
 #### @SparkBody
-Sparknnotation can help you convert the body of a request to a java object
+Sparknotation can help you convert the body of a request to a java object
 
 For that there are two options
-##### Assign a BodyTransformer when using *Sparknnotation.init()*
+##### Assign a BodyTransformer when using *Sparknotation.init()*
 This way will apply the body transformer to all the @SparkBody parameters of all your controllers if not specified othewise with the *transformer* parameter of the annotation.
 
 Example using Gson
 ```Java
 Gson gson = new Gson();
-Sparknnotation.init(gson::fromJson);
+Sparknotation.init(gson::fromJson);
 ```
 This works because BodyTransformer is a functional interface and Gson.fromJson(String json, Class class) fits right into it.
 

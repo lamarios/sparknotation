@@ -29,8 +29,8 @@ public class SimpleTest {
      */
     @Test
     public void testControllerExists() {
-        assertTrue(Sparknnotation.getController("test", TestController.class).getClass().equals(TestController.class));
-        assertTrue(Sparknnotation.getController(TestController.class).getClass().equals(TestController.class));
+        assertTrue(Sparknotation.getController("test", TestController.class).getClass().equals(TestController.class));
+        assertTrue(Sparknotation.getController(TestController.class).getClass().equals(TestController.class));
     }
 
 
