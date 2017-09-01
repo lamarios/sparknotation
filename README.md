@@ -2,7 +2,31 @@
 
 Sparknnotation is a library to use Sparkjava framework with annotation. It is useful when working on projects with a lot of endpoints where it sometimes becomes messy to deal with all these Spark.something methods. It also saves the hassle of alwyas getting back parameters, query parameters and headers from the *Request* object
 
-[TOC]
+## Table of content
+
+* [Sparknnotation](#sparknnotation)
+      * [How to use](#how-to-use)
+         * [Simple GET request](#simple-get-request)
+         * [Response Transformer](#response-transformer)
+      * [Detailed usage](#detailed-usage)
+         * [Class annotation](#class-annotation)
+            * [@SparkController](#sparkcontroller)
+         * [Method annotations](#method-annotations)
+            * [@SparkGet](#sparkget)
+            * [@SparkPost](#sparkpost)
+            * [@SparkPut](#sparkput)
+            * [@SparkDelete](#sparkdelete)
+            * [@SparkOptions](#sparkoptions)
+            * [Combining methods](#combining-methods)
+         * [Method annotations](#method-annotations-1)
+            * [@SparkParam](#sparkparam)
+            * [@SparkQueryParam](#sparkqueryparam)
+            * [@SparkHeader](#sparkheader)
+            * [@SparkSplat](#sparksplat)
+            * [@SparkBody](#sparkbody)
+               * [Assign a BodyTransformer when using <em>Sparknnotation.init()</em>](#assign-a-bodytransformer-when-using-sparknnotationinit)
+               * [Using <em>@SparkBody</em> transformer parameter](#using-sparkbody-transformer-parameter)
+         * [Request and Response objects](#request-and-response-objects)
 
 ## How to use
 
