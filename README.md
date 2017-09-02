@@ -13,10 +13,6 @@ Add this repository to your pom.xml
     <repository>
         <id>sparknotation</id>
         <url>https://raw.github.com/lamarios/sparknnotation/mvn-repo/</url>
-        <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-        </snapshots>
     </repository>
 </repositories>
 ```
@@ -27,7 +23,7 @@ and the dependency as follow
 <dependency>
     <groupId>com.ftpix</groupId>
     <artifactId>sparknotation</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 </dependency>
 ```
 
@@ -68,6 +64,15 @@ Sparknotation.getController(TestController.class);
 
 Note that is still possible to configure SparkJava normally or to add any other endpoint using SparkJava original way.
 
+
+If your controllers have contructor parameters, you can add them when calling *Sparknotation.init()*
+```Java
+MyController myController = new MyController("hello");
+MySecondController mySecondController = new MySecondController("world");
+
+Sparknotation.init(myController, mySecondController);
+```
+Note that this will still add other controllers that have @SparkController.
 
 ### Response Transformer
 SparkJava offers a great way to transform the response before sending it back to the client (JSON results or templating engine), Sparknnnotation offers the same options so the method annotations take in a parameter for classes extending Spark's ResponseTransformer
