@@ -20,7 +20,7 @@ public class Setup {
 
             Gson gson = new Gson();
 
-            Sparknotation.init(gson::fromJson);
+            Sparknotation.init(gson::fromJson, new ControllerWithConstructorParam("hello"));
 
 
             Spark.exception(Exception.class, (e,req, res) ->{

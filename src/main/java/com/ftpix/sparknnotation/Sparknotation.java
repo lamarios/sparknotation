@@ -34,7 +34,7 @@ public class Sparknotation {
             || a.annotationType().equals(SparkAfterAfter.class);
 
 
-    public static void init() {
+    public static void init(Object... controllerInstances) {
         init(null);
     }
 
@@ -43,7 +43,7 @@ public class Sparknotation {
      *
      * @param transformer a json body value
      */
-    public static void init(BodyTransformer transformer) {
+    public static void init(BodyTransformer transformer, Object... controllerInstances) {
 
         bodyTransformer = transformer;
 
@@ -53,35 +53,56 @@ public class Sparknotation {
 
         logger.debug("found {} classes with @SparkController annotation", typesAnnotatedWith.size());
 
+        Stream.of(controllerInstances).forEach(i -> {
+            try {
+                processController(i.getClass(), i);
+            } catch (IllegalAccessException | InstantiationException e) {
+                logger.error("Coudln't create controller instance", e);
+            }
+        });
+
         typesAnnotatedWith.stream()
                 .forEach(clazz -> {
-
                     try {
-                        SparkController annotation = clazz.getAnnotation(SparkController.class);
-
-                        Object o = clazz.newInstance();
-
-                        String controllerName = Optional.of(annotation.name())
-                                .filter(n -> n.trim().length() > 0)
-                                .orElse(o.getClass().getCanonicalName());
-
-                        controllers.put(controllerName, o);
-
-                        String path = Optional.ofNullable(annotation.value()).orElse("");
-
-                        //find method with desired annotations
-                        Stream.of(clazz.getDeclaredMethods())
-                                .filter(m -> Stream.of(m.getDeclaredAnnotations()).anyMatch(isSparkAnnotation))
-                                .forEach(m -> Sparknotation.processMethod(path, o, m));
-                    } catch (InstantiationException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                        processController(clazz, null);
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        logger.error("Coudln't create controller instance", e);
                     }
                 });
 
     }
 
+    /**
+     * Adds the controller to the list of controllers and create its endpoints
+     *
+     * @param clazz
+     * @param instance
+     */
+    private static void processController(Class clazz, Object instance) throws IllegalAccessException, InstantiationException {
+        SparkController annotation = (SparkController) clazz.getAnnotation(SparkController.class);
+
+        String controllerName = Optional.of(annotation.name())
+                .filter(n -> n.trim().length() > 0)
+                .orElse(clazz.getCanonicalName());
+
+
+        if (!controllers.containsKey(controllerName)) {
+            final Object finalInstance;
+            if (instance == null) {
+                finalInstance = clazz.newInstance();
+            } else {
+                finalInstance = instance;
+            }
+
+            controllers.put(controllerName, finalInstance);
+            String path = Optional.ofNullable(annotation.value()).orElse("");
+
+            //find method with desired annotations
+            Stream.of(clazz.getDeclaredMethods())
+                    .filter(m -> Stream.of(m.getDeclaredAnnotations()).anyMatch(isSparkAnnotation))
+                    .forEach(m -> processMethod(path, finalInstance, m));
+        }
+    }
 
     /**
      * Process methods with any of the Spark annotation
@@ -104,6 +125,13 @@ public class Sparknotation {
     }
 
 
+    /**
+     * Creates an endpoint depending on the controller, method and annotation
+     * @param controllerPath The path prefix from the controller
+     * @param controller the controller itself
+     * @param method the method that the endpoint is going to call
+     * @param annotation the Sparknotation annotation
+     */
     private static void createEndPoint(String controllerPath, Object controller, Method method, Annotation annotation) {
 
         String value = null;
@@ -177,7 +205,7 @@ public class Sparknotation {
                 Optional<Method> optionalMethod = Optional.ofNullable(spark.getMethod(sparkMethod, sparkMethodParams.toArray(new Class[sparkMethodParams.size()])));
 
                 TemplateViewRoute route = (req, res) -> (ModelAndView) methodContent(controller, method, req, res);
-                if(optionalMethod.isPresent()){
+                if (optionalMethod.isPresent()) {
                     Method m = optionalMethod.get();
                     logger.info("Creating {} [{}] on controller: {} with TemplateEngine {}", sparkMethod, path, controller.getClass(), templateEngine.getClass());
                     m.invoke(null, path, acceptType, route, templateEngine);
@@ -189,19 +217,16 @@ public class Sparknotation {
                 Optional<Method> optionalMethod = Optional.ofNullable(spark.getMethod(sparkMethod, sparkMethodParams.toArray(new Class[sparkMethodParams.size()])));
 
                 Route route = (req, res) -> methodContent(controller, method, req, res);
-                if(optionalMethod.isPresent()){
+                if (optionalMethod.isPresent()) {
                     Method m = optionalMethod.get();
                     logger.info("Creating {} [{}] on controller: {} with ResponseTransformer {}", sparkMethod, path, controller.getClass(), transformer.getClass());
                     m.invoke(null, path, acceptType, route, transformer);
                 }
             }
-        }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             logger.error("Couldn't create Spark endpoint");
             throw new RuntimeException(e);
         }
-
-
-
 
 
 //        Spark.options(path, acceptType,(request, response) -> methodContent(controller,method, request, response), value);
@@ -268,7 +293,6 @@ public class Sparknotation {
 
         }
     }
-
 
 
     /**
