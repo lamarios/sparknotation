@@ -72,4 +72,57 @@ public class TypedParamTest {
 
     }
 
+    /**
+     * Test an empty int controller method parameter {@link com.ftpix.sparknnotation.testapp.TypedParametersController#test(int)}
+     * @throws UnirestException
+     */
+    @Test
+    public void testIntPost() throws UnirestException {
+        String result = Unirest.post(Setup.LOCALHOST + "/typed/int").asString().getBody();
+        assertEquals("0", result );
+    }
+
+    /**
+     * Tests a float controller method parameter {@link com.ftpix.sparknnotation.testapp.TypedParametersController#testFloat(float)}
+     * @throws UnirestException
+     */
+    @Test
+    public void testFloatPost() throws UnirestException {
+        String result = Unirest.post(Setup.LOCALHOST + "/typed/float").asString().getBody();
+        assertEquals("0.0", result);
+
+    }
+
+    /**
+     * Test double controller method parameter {@link com.ftpix.sparknnotation.testapp.TypedParametersController#testDouble(double)}
+     * @throws UnirestException
+     */
+    @Test
+    public void testDoublePost() throws UnirestException {
+        String result = Unirest.post(Setup.LOCALHOST + "/typed/double").asString().getBody();
+        assertEquals("0.0", result);
+
+    }
+
+    /**
+     * Test long controller method parameter {@link com.ftpix.sparknnotation.testapp.TypedParametersController#testLong(long)}
+     * @throws UnirestException
+     */
+    @Test
+    public void testLongPost() throws UnirestException {
+        String result = Unirest.post(Setup.LOCALHOST + "/typed/long").asString().getBody();
+        assertEquals(0, Long.parseLong(result));
+
+    }
+
+    /**
+     * Test boolean controller method paramter {@link com.ftpix.sparknnotation.testapp.TypedParametersController#testBoolean(boolean)}
+     * @throws UnirestException
+     */
+    @Test
+    public void testBooleanPost() throws UnirestException {
+        String result = Unirest.post(Setup.LOCALHOST + "/typed/boolean").asString().getBody();
+        assertEquals(false, Boolean.parseBoolean(result));
+
+    }
 }

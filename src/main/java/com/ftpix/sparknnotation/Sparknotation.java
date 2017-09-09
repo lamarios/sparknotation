@@ -127,10 +127,11 @@ public class Sparknotation {
 
     /**
      * Creates an endpoint depending on the controller, method and annotation
+     *
      * @param controllerPath The path prefix from the controller
-     * @param controller the controller itself
-     * @param method the method that the endpoint is going to call
-     * @param annotation the Sparknotation annotation
+     * @param controller     the controller itself
+     * @param method         the method that the endpoint is going to call
+     * @param annotation     the Sparknotation annotation
      */
     private static void createEndPoint(String controllerPath, Object controller, Method method, Annotation annotation) {
 
@@ -425,15 +426,35 @@ public class Sparknotation {
      */
     private static Object getParamValue(String requestParam, Class clazz) {
         if (clazz.equals(int.class) || clazz.equals(Integer.class)) {
-            return Integer.parseInt(requestParam);
+            if (requestParam != null) {
+                return Integer.parseInt(requestParam);
+            } else {
+                return clazz.equals(int.class) ? 0 : null;
+            }
         } else if (clazz.equals(float.class) || clazz.equals(Float.class)) {
-            return Float.parseFloat(requestParam);
+            if (requestParam != null) {
+                return Float.parseFloat(requestParam);
+            } else {
+                return clazz.equals(float.class) ? 0 : null;
+            }
         } else if (clazz.equals(double.class) || clazz.equals(Double.class)) {
-            return Double.parseDouble(requestParam);
+            if (requestParam != null) {
+                return Double.parseDouble(requestParam);
+            } else {
+                return clazz.equals(double.class) ? 0 : null;
+            }
         } else if (clazz.equals(boolean.class) || clazz.equals(Boolean.class)) {
-            return Boolean.parseBoolean(requestParam);
+            if (requestParam != null) {
+                return Boolean.parseBoolean(requestParam);
+            } else {
+                return clazz.equals(boolean.class) ? false : null;
+            }
         } else if (clazz.equals(long.class) || clazz.equals(Long.class)) {
-            return Long.parseLong(requestParam);
+            if (requestParam != null) {
+                return Long.parseLong(requestParam);
+            } else {
+                return clazz.equals(long.class) ? 0 : null;
+            }
         } else {
             return requestParam;
         }
