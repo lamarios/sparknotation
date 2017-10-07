@@ -7,12 +7,15 @@ import com.ftpix.sparknnotation.defaultvalue.DefaultTransformer;
 import com.ftpix.sparknnotation.interfaces.BodyTransformer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.reflections.Reflections;
+import org.scannotation.AnnotationDB;
+import org.scannotation.ClasspathUrlFinder;
 import spark.*;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -43,13 +46,18 @@ public class Sparknotation {
      *
      * @param transformer a json body value
      */
-    public static void init(BodyTransformer transformer, Object... controllerInstances) {
+    public static void init(BodyTransformer transformer, Object... controllerInstances) throws IOException {
 
         bodyTransformer = transformer;
 
         logger.info("Json Body Transformer");
 
-        Set<Class<?>> typesAnnotatedWith = new Reflections("").getTypesAnnotatedWith(SparkController.class);
+//        Set<Class<?>> typesAnnotatedWith = new Reflections("**").getTypesAnnotatedWith(SparkController.class);
+        URL[] urls = ClasspathUrlFinder.findClassPaths(); // scan java.class.path
+        AnnotationDB db = new AnnotationDB();
+        db.scanArchives(urls);
+        Set<String> typesAnnotatedWith =
+                db.getAnnotationIndex().get(SparkController.class.getName());
 
         logger.debug("found {} classes with @SparkController annotation", typesAnnotatedWith.size());
 
@@ -62,6 +70,13 @@ public class Sparknotation {
         });
 
         typesAnnotatedWith.stream()
+                .map(className -> {
+                    try {
+                        return Class.forName(className);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .forEach(clazz -> {
                     try {
                         processController(clazz, null);

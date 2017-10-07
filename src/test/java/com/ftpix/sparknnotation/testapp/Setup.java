@@ -4,6 +4,8 @@ import com.ftpix.sparknnotation.Sparknotation;
 import com.google.gson.Gson;
 import spark.Spark;
 
+import java.io.IOException;
+
 public class Setup {
 
     public static final String LOCALHOST = "http://localhost:14567";
@@ -20,7 +22,11 @@ public class Setup {
 
             Gson gson = new Gson();
 
-            Sparknotation.init(gson::fromJson, new ControllerWithConstructorParam("hello"));
+            try {
+                Sparknotation.init(gson::fromJson, new ControllerWithConstructorParam("hello"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
             Spark.exception(Exception.class, (e,req, res) ->{
