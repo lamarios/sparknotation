@@ -28,6 +28,11 @@
             <artifactId>spark-core</artifactId>
             <version>2.6.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/net.sf.scannotation/scannotation -->
         <dependency>
             <groupId>net.sf.scannotation</groupId>
