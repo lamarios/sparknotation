@@ -216,15 +216,21 @@ public class Sparknotation {
         try {
             //method that use a template
             if (method.getReturnType().equals(ModelAndView.class)) {
-                sparkMethodParams.add(TemplateViewRoute.class);
-                sparkMethodParams.add(TemplateEngine.class);
+                sparkMethodParams.add(Route.class);
                 Optional<Method> optionalMethod = Optional.ofNullable(spark.getMethod(sparkMethod, sparkMethodParams.toArray(new Class[sparkMethodParams.size()])));
 
-                TemplateViewRoute route = (req, res) -> (ModelAndView) methodContent(controller, method, req, res);
+
+                final TemplateEngine finalTemplateEngine = templateEngine;
+                Route route = (req, res) -> {
+                    return finalTemplateEngine.render(
+                            (ModelAndView) methodContent(controller, method, req, res)
+                    );
+                };
+
                 if (optionalMethod.isPresent()) {
                     Method m = optionalMethod.get();
                     logger.info("Creating {} [{}] on controller: {} with TemplateEngine {}", sparkMethod, path, controller.getClass(), templateEngine.getClass());
-                    m.invoke(null, path, acceptType, route, templateEngine);
+                    m.invoke(null, path, acceptType, route);
                 }
             } else { //normal methods
                 sparkMethodParams.add(Route.class);
