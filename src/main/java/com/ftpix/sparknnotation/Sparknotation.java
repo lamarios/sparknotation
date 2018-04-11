@@ -41,6 +41,7 @@ public class Sparknotation {
         init(null, controllerInstances);
     }
 
+
     /**
      * Will find all the @SparkController annotations and will process them.
      *

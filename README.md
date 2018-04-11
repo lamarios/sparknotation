@@ -23,7 +23,7 @@ and the dependency as follow
 <dependency>
     <groupId>com.ftpix</groupId>
     <artifactId>sparknotation</artifactId>
-    <version>1.8</version>
+    <version>1.9</version>
 </dependency>
 ```
 
