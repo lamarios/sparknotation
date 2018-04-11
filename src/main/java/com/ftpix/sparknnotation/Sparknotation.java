@@ -37,8 +37,8 @@ public class Sparknotation {
             || a.annotationType().equals(SparkAfterAfter.class);
 
 
-    public static void init(Object... controllerInstances) {
-        init(null);
+    public static void init(Object... controllerInstances) throws IOException {
+        init(null, controllerInstances);
     }
 
     /**
