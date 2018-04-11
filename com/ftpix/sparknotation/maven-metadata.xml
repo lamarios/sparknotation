@@ -3,10 +3,10 @@
   <groupId>com.ftpix</groupId>
   <artifactId>sparknotation</artifactId>
   <versioning>
-    <release>1.7</release>
+    <release>1.8</release>
     <versions>
-      <version>1.7</version>
+      <version>1.8</version>
     </versions>
-    <lastUpdated>20171223143442</lastUpdated>
+    <lastUpdated>20180411131728</lastUpdated>
   </versioning>
 </metadata>
