@@ -43,7 +43,7 @@ repositories {
 
 and the dependency as follow
 
-```xml
+```
 dependencies {
     compile group: "com.ftpix", name: "sparknotation", version:"1.9"
 }
