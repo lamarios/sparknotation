@@ -6,6 +6,8 @@ Sparknotation is a library to use Sparkjava framework with annotation. It is use
 
 ## Download
 
+### Maven
+
 Add this repository to your pom.xml
 
 ```xml
@@ -25,6 +27,26 @@ and the dependency as follow
     <artifactId>sparknotation</artifactId>
     <version>1.9</version>
 </dependency>
+```
+
+### Gradle
+
+Add this repository to your build.gradle
+
+```
+repositories {
+    maven {
+        url 'https://raw.github.com/lamarios/sparknnotation/mvn-repo/'
+    }
+}
+```
+
+and the dependency as follow
+
+```xml
+dependencies {
+    compile group: "com.ftpix", name: "sparknotation", version:"1.9"
+}
 ```
 
 ## How to use
