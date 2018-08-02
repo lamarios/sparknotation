@@ -6,7 +6,7 @@
 
     <groupId>com.ftpix</groupId>
     <artifactId>sparknotation</artifactId>
-    <version>1.9</version>
+    <version>1.10</version>
 
     <properties>
         <!-- github server corresponds to entry in ~/.m2/settings.xml -->
