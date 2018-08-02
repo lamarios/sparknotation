@@ -9,17 +9,6 @@ Sparknotation is a library to use Sparkjava framework with annotation. It is use
 Add this repository to your pom.xml
 
 ```xml
-<repositories>
-    <repository>
-        <id>sparknotation</id>
-        <url>https://raw.github.com/lamarios/sparknnotation/mvn-repo/</url>
-    </repository>
-</repositories>
-```
-
-and the dependency as follow
-
-```xml
 <dependency>
     <groupId>com.ftpix</groupId>
     <artifactId>sparknotation</artifactId>
