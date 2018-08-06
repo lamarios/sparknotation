@@ -20,17 +20,7 @@ Add this repository to your pom.xml
 
 ### Gradle
 
-Add this repository to your build.gradle
-
-```
-repositories {
-    maven {
-        url 'https://raw.github.com/lamarios/sparknnotation/mvn-repo/'
-    }
-}
-```
-
-and the dependency as follow
+Add the dependency as follow
 
 ```
 dependencies {
