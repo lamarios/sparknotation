@@ -24,7 +24,7 @@ Add the dependency as follow
 
 ```
 dependencies {
-    compile group: "com.ftpix", name: "sparknotation", version:"1.9"
+    compile group: "com.ftpix", name: "sparknotation", version:"1.10"
 }
 ```
 
