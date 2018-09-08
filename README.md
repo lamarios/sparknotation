@@ -14,7 +14,7 @@ Add this repository to your pom.xml
 <dependency>
     <groupId>com.ftpix</groupId>
     <artifactId>sparknotation</artifactId>
-    <version>1.10</version>
+    <version>1.11</version>
 </dependency>
 ```
 
