@@ -1,6 +1,7 @@
 # Sparknotation
 
 ![travis-ci](https://travis-ci.org/lamarios/sparknotation.svg?branch=master)
+![maven](https://maven-badges.herokuapp.com/maven-central/com.ftpix/sparknotation/badge.svg)
 
 Sparknotation is a library to use Sparkjava framework with annotation. It is useful when working on projects with a lot of endpoints where it sometimes becomes messy to deal with all these Spark.something methods. It also saves the hassle of always getting back parameters, query parameters and headers from the *Request* object.
 
