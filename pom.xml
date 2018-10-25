@@ -15,12 +15,13 @@
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+   
     <licenses>
         <license>
-            <name>LGPL license, Version 3.0</name>
-            <url>https://www.gnu.org/licenses/lgpl.txt</url>
+            <name>Apache License, Version 2.0</name>
+            <url>https://raw.githubusercontent.com/lamarios/sparknotation/master/LICENSE</url>
         </license>
-    </licenses>
+</licenses>
 
     <name>${groupId}:${artifactId}</name>
     <description>Sparknotation is a library to use Sparkjava framework with annotation. It is useful when working on projects with a lot of endpoints where it sometimes becomes messy to deal with all these Spark.something methods. It also saves the hassle of always getting back parameters, query parameters and headers from the Request object.</description>
