@@ -12,19 +12,23 @@
         <!-- github server corresponds to entry in ~/.m2/settings.xml -->
         <github.global.server>github</github.global.server>
         <skip.publish.process>true</skip.publish.process>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-   
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
             <url>https://raw.githubusercontent.com/lamarios/sparknotation/master/LICENSE</url>
         </license>
-</licenses>
+    </licenses>
 
     <name>${groupId}:${artifactId}</name>
-    <description>Sparknotation is a library to use Sparkjava framework with annotation. It is useful when working on projects with a lot of endpoints where it sometimes becomes messy to deal with all these Spark.something methods. It also saves the hassle of always getting back parameters, query parameters and headers from the Request object.</description>
+    <description>Sparknotation is a library to use Sparkjava framework with annotation. It is useful when working on
+        projects with a lot of endpoints where it sometimes becomes messy to deal with all these Spark.something
+        methods. It also saves the hassle of always getting back parameters, query parameters and headers from the
+        Request object.
+    </description>
     <url>https://github.com/lamarios/sparknotation</url>
 
     <scm>
@@ -40,13 +44,13 @@
     </developers>
 
 
-<!--    <distributionManagement>
-        <repository>
-            <id>internal.repo</id>
-            <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/mvn-repo</url>
-        </repository>
-    </distributionManagement>-->
+    <!--    <distributionManagement>
+            <repository>
+                <id>internal.repo</id>
+                <name>Temporary Staging Repository</name>
+                <url>file://${project.build.directory}/mvn-repo</url>
+            </repository>
+        </distributionManagement>-->
 
     <dependencies>
 
@@ -122,27 +126,27 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
- <!-- Code coverage -->
-<plugin>
-    <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.7.6.201602180812</version>
-    <executions>
-        <execution>
-            <id>prepare-agent</id>
-            <goals>
-                <goal>prepare-agent</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
-<plugin>
-    <groupId>org.eluder.coveralls</groupId>
-    <artifactId>coveralls-maven-plugin</artifactId>
-    <version>4.3.0</version>
-    <configuration>
-    </configuration>
-</plugin>
+            <!-- Code coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.2</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>4.3.0</version>
+                <configuration>
+                </configuration>
+            </plugin>
 
             <!-- Deployment stuff -->
             <plugin>
