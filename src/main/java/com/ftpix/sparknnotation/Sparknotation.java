@@ -36,7 +36,12 @@ public class Sparknotation {
             || a.annotationType().equals(SparkAfter.class)
             || a.annotationType().equals(SparkAfterAfter.class);
 
-
+    /**
+     * Init spark notation with no default body transformer
+     *
+     * @param controllerInstances manually specified controllers
+     * @throws IOException if any controller isn't set up properly
+     */
     public static void init(Object... controllerInstances) throws IOException {
         init(null, controllerInstances);
     }
@@ -45,7 +50,9 @@ public class Sparknotation {
     /**
      * Will find all the @SparkController annotations and will process them.
      *
-     * @param transformer a json body value
+     * @param transformer         a json body value
+     * @param controllerInstances manually specified controllers
+     * @throws IOException if any controller isn't set up properly
      */
     public static void init(BodyTransformer transformer, Object... controllerInstances) throws IOException {
 
@@ -91,8 +98,10 @@ public class Sparknotation {
     /**
      * Adds the controller to the list of controllers and create its endpoints
      *
-     * @param clazz
-     * @param instance
+     * @param clazz    the class of the controller to process
+     * @param instance the instance of it
+     * @throws IllegalAccessException reflection errors
+     * @throws InstantiationException when the controller fails to be created
      */
     private static void processController(Class clazz, Object instance) throws IllegalAccessException, InstantiationException {
         SparkController annotation = (SparkController) clazz.getAnnotation(SparkController.class);
@@ -490,8 +499,8 @@ public class Sparknotation {
      *
      * @param name  the value of the controller
      * @param clazz the class of it
-     * @param <T>
-     * @return
+     * @param <T>   a controller class
+     * @return the controller itself
      */
     public static <T> T getController(String name, Class<T> clazz) {
         return (T) controllers.get(name);
@@ -502,8 +511,8 @@ public class Sparknotation {
      * Gets a controller by its class as we won't have more than a single controller by class
      *
      * @param clazz the class of the controller
-     * @param <T>
-     * @return
+     * @param <T>   a controller class
+     * @return the controller itself
      */
     public static <T> T getController(Class<T> clazz) {
         return (T) controllers.values().stream().filter(c -> c.getClass().equals(clazz)).findFirst().orElse(null);
