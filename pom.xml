@@ -32,6 +32,7 @@
     <url>https://github.com/lamarios/sparknotation</url>
 
     <scm>
+        <connection>scm:git:https://github.com/lamarios/sparknotation.git</connection>
         <url>https://github.com/lamarios/sparknotation</url>
     </scm>
 
