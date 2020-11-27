@@ -363,8 +363,15 @@ public class Sparknotation {
         List<Object> params = buildParamList(method, request, response);
 
         logger.info("Params {}", params);
-
-        return method.invoke(controller, params.toArray());
+        try {
+            return method.invoke(controller, params.toArray());
+        } catch (Exception e) {
+            if (e.getCause() != null && e.getCause() instanceof RuntimeException) {
+                throw (RuntimeException) e.getCause();
+            } else {
+                throw e;
+            }
+        }
     }
 
 

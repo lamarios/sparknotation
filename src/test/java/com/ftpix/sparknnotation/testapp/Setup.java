@@ -22,6 +22,7 @@ public class Setup {
 
             Gson gson = new Gson();
 
+            Spark.get("/default-halt", (req, res) -> Spark.halt(503,"hello"));
             try {
                 Sparknotation.init(gson::fromJson, new ControllerWithConstructorParam("hello"));
             } catch (IOException e) {
@@ -32,6 +33,7 @@ public class Setup {
             Spark.exception(Exception.class, (e,req, res) ->{
                 e.printStackTrace();
             });
+
 
             System.out.println("Starting server");
         }
