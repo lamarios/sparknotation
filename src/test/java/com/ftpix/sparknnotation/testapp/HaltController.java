@@ -37,4 +37,14 @@ public class HaltController {
         Spark.halt(600, "nopenope");
         return  0;
     }
+
+    @SparkGet("/before")
+    public int haltBefore(){
+        return 0;
+    }
+
+    @SparkBefore("/before")
+    public void before(){
+        Spark.halt(401, "unauthorized");
+    }
 }

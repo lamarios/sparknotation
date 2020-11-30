@@ -344,7 +344,15 @@ public class Sparknotation {
 
         logger.info("Params {}", params);
 
-        method.invoke(controller, params.toArray());
+        try {
+            method.invoke(controller, params.toArray());
+        } catch (Exception e) {
+            if (e.getCause() != null && e.getCause() instanceof RuntimeException) {
+                throw (RuntimeException) e.getCause();
+            } else {
+                throw e;
+            }
+        }
     }
 
     /**

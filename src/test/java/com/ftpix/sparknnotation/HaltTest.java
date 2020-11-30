@@ -43,5 +43,9 @@ public class HaltTest {
         assertEquals(600, def.getStatus());
         assertEquals("nopenope", def.getBody());
 
+        def = Unirest.get(LOCALHOST + "/halt/before").asString();
+        assertEquals(401, def.getStatus());
+        assertEquals("unauthorized", def.getBody());
+
     }
 }
