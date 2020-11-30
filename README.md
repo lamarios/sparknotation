@@ -16,7 +16,7 @@ Add this repository to your pom.xml
 <dependency>
     <groupId>com.ftpix</groupId>
     <artifactId>sparknotation</artifactId>
-    <version>1.14</version>
+    <version>1.15</version>
 </dependency>
 ```
 
@@ -26,7 +26,7 @@ Add the dependency as follow
 
 ```
 dependencies {
-    compile group: "com.ftpix", name: "sparknotation", version:"1.14"
+    compile group: "com.ftpix", name: "sparknotation", version:"1.15"
 }
 ```
 
